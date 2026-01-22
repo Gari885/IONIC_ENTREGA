@@ -1,99 +1,83 @@
-ion-accordion-group {
+.days-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     margin-top: 10px;
 }
 
-ion-accordion {
-    background: #1e1e1e; // Dark background
-    margin-bottom: 8px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.day-block {
+    background: #1e1e1e;
+    border-radius: 16px;
+    padding: 16px;
     border: 1px solid rgba(255, 255, 255, 0.05);
-}
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 
-ion-item {
-    --background: transparent;
-    --detail-icon-color: #bb86fc;
-    --color: white;
-
-    ion-label h3 {
-        font-weight: 600;
-    }
-
-    ion-label p {
-        color: #aaa;
-    }
-}
-
-.temp-note {
-    font-weight: bold;
-    font-size: 1.1em;
-    color: white;
-    margin-left: 8px;
-}
-
-.end-slot {
-    display: flex;
-    align-items: center;
-}
-
-.hourly-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    background: #121212; // Darker inner background
-    padding: 0 16px;
-}
-
-.hourly-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: 0.95em;
-    color: white;
-
-    &:last-child {
-        border-bottom: none;
-    }
-
-    .time {
-        width: 50px;
-        font-weight: 600;
-        color: #ccc;
-    }
-
-    .icon-container {
+    .day-header {
         display: flex;
+        justify-content: space-between;
         align-items: center;
-        gap: 8px;
-        flex: 2;
+        margin-bottom: 12px;
 
-        img {
-            width: 30px;
-            height: 30px;
-        }
-
-        .desc {
-            font-size: 0.9em;
-            color: #aaa;
+        h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
             text-transform: capitalize;
         }
+
+        .max-temp {
+            font-size: 0.95em;
+            color: #bb86fc;
+            font-weight: 700;
+        }
+    }
+}
+
+.daily-carousel {
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 4px;
+
+    // Hide scrollbars
+    &::-webkit-scrollbar {
+        display: none;
     }
 
-    .precip {
-        font-size: 0.85em;
-        color: #bb86fc;
-        margin-right: 10px;
-        min-width: 60px;
-        text-align: right;
-    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 
-    .temp {
-        font-size: 1.1em;
-        min-width: 40px;
-        text-align: right;
-        color: white;
+    .carousel-item {
+        min-width: 70px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 12px;
+        padding: 10px;
+
+        .time {
+            font-size: 0.8em;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+
+        img {
+            width: 35px;
+            height: 35px;
+        }
+
+        .temp {
+            font-weight: 700;
+            font-size: 1em;
+            color: white;
+        }
+
+        .precip {
+            font-size: 0.7em;
+            color: #bb86fc;
+            margin-top: 4px;
+        }
     }
 }

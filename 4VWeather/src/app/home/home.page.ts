@@ -104,20 +104,21 @@ export class HomePage implements OnInit {
     const list = data.list;
     const today = new Date().toISOString().slice(0, 10);
 
-    // 1. "Today" forecast (every 3 hours available for the rest of the day)
-    // NOTE: OpenWeather free API only provides 3-hour intervals (`list`). 
-    // We cannot get 1-hour intervals without the OneCall API subscription.
-    // We will display ALL available 3-hour slots for the current date as the "Hourly" section.
-    this.hourlyForecast = list.filter((item: any) => item.dt_txt.startsWith(today));
-
-    // If "Today" has very few items left (e.g. it's 11 PM), maybe we should append early tomorrow?
-    // User requested "El dia de hoy", so we stick to 'today's items'.
-    // If empty (end of day), we could show a message or just show the very next few hours of tomorrow?
-    // Let's fallback to "Next 24h" logic if today's list is too short, or stick to literal "Today".
-    // For better UX, if today is almost over, show "Next 24h".
-    // Let's stick to "Next 8 items (24h)" as "Hourly" carousel is usually intended for immediate future,
-    // which effectively covers "Today + Tonight".
-    this.hourlyForecast = list.slice(0, 9); // Show next 24h (approx 8-9 items)
+    // 1. "Today" forecast (Interpolated to 1-hour intervals)
+    // Filter items that belong to today (or very close future). 
+    // We strictly want "Today" displayed hour-by-hour.
+    const todayItems = list.filter((item: any) => item.dt_txt.startsWith(today));
+    
+    // If we have items, interpolate them to get 1h gaps
+    if (todayItems.length > 0) {
+        this.hourlyForecast = this.interpolateHourlyData(todayItems);
+    } else {
+        // Fallback if late at night: take next available and interpolate
+        this.hourlyForecast = this.interpolateHourlyData(list.slice(0, 3)); 
+    }
+    
+    // Limit to next ~24h visible (e.g., 24 slots)
+    this.hourlyForecast = this.hourlyForecast.slice(0, 24);
 
     // 2. Next 4 Days (Excluding today)
     const grouped: any = {};
@@ -134,6 +135,46 @@ export class HomePage implements OnInit {
       date: date,
       items: grouped[date] // This strictly contains the 3h intervals for that day
     }));
+  }
+
+  interpolateHourlyData(items: any[]): any[] {
+      const result: any[] = [];
+      
+      for (let i = 0; i < items.length - 1; i++) {
+          const current = items[i];
+          const next = items[i+1];
+          
+          // Add current (original)
+          result.push(current);
+          
+          // Interpolate 2 intermediate points (t+1, t+2)
+          for (let j = 1; j <= 2; j++) {
+              // Clone current structure
+              const interpolated = JSON.parse(JSON.stringify(current));
+              
+              // Calculate interpolated time
+              const currentTime = new Date(current.dt_txt).getTime();
+              const nextTime = new Date(next.dt_txt).getTime();
+              const timeDiff = nextTime - currentTime; // Should be 3 hours (10800000 ms)
+              const interpTime = currentTime + (timeDiff * (j / 3));
+              interpolated.dt_txt = new Date(interpTime).toISOString().replace('T', ' ').slice(0, 19);
+              
+              // Interpolate Temperature
+              const tempDiff = next.main.temp - current.main.temp;
+              interpolated.main.temp = current.main.temp + (tempDiff * (j / 3));
+
+              result.push(interpolated);
+          }
+      }
+      
+      // Add the very last item if we didn't cover it (though loop goes to length-1, so we should append last item or handle it)
+      // The logic above adds 'current' then 2 interpolated. 
+      // We need to push the last item of the array specifically if loop finishes.
+      if (items.length > 0) {
+          result.push(items[items.length - 1]);
+      }
+      
+      return result;
   }
 
   onSearch(city: string) {
