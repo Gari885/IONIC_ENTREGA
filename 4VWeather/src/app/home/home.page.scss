@@ -1,6 +1,6 @@
 ion-content {
-  // Dark Background matching the Atomic Design aesthetic
-  --background: #121212;
+  // "Claro blanco azulado"
+  --background: linear-gradient(180deg, #f0f4f8 0%, #d9e2ec 100%);
 }
 
 .main-container {
@@ -21,11 +21,11 @@ ion-content {
     align-items: center;
     gap: 8px;
     font-weight: 800;
-    color: white; // White logo on dark
+    color: #333; // Dark text for light background
 
     ion-icon {
       font-size: 1.8em;
-      color: #bb86fc; // Light purple accent
+      color: #333; // Dark icon
     }
 
     span {
@@ -42,14 +42,14 @@ ion-content {
   gap: 4px;
   font-size: 0.9em;
   color: white;
-  background: rgba(255, 255, 255, 0.1); // Glass effect
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #2c3e50; // Dark pill for contrast
   padding: 6px 12px;
   border-radius: 20px;
   margin-right: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   ion-icon {
-    color: #bb86fc;
+    color: #fff;
   }
 }
 
@@ -61,7 +61,7 @@ ion-content {
   h3 {
     font-size: 1.1rem;
     font-weight: 700;
-    color: #eeeeee; // Light grey text
+    color: #486581; // Muted Blue-Grey for titles
     text-transform: uppercase;
     letter-spacing: 0.5px;
     margin: 0;
@@ -72,7 +72,7 @@ ion-content {
 .error-container {
   text-align: center;
   margin-top: 50px;
-  color: #aaa;
+  color: #666;
 
   p {
     margin-bottom: 20px;

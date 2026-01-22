@@ -1,70 +1,75 @@
 .weather-card {
-    // Vibrant Purple Gradient to match the premium look
-    --background: linear-gradient(135deg, #7F00FF 0%, #E100FF 100%);
-    // Or stick to the deep violet/blue:
-    --background: linear-gradient(135deg, #6200EA 0%, #9D46FF 100%);
+    // "Colores más apagados como en lo de las 24h" -> Dark Grey/Slate
+    --background: #1e1e1e; // Matching the dark muted look
+    // Optional: subtle gradient to keep it premium but muted
+    background: linear-gradient(145deg, #232323 0%, #1a1a1a 100%);
 
     color: white;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 6px 6px rgba(0, 0, 0, 0.3);
+    border-radius: 24px;
+    // Stronger shadow for pop against light BG
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.15);
     margin-inline: 0;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 
     ion-card-header {
         text-align: center;
+        padding-top: 30px;
     }
 
     ion-card-subtitle {
-        color: rgba(255, 255, 255, 0.9);
+        color: #a0a0a0; // Muted grey text
         font-size: 1.1em;
         font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
     }
 
     .temp-title {
-        font-size: 4.5em;
-        /* Bigger */
-        color: white;
+        font-size: 5em;
+        color: #f0f0f0;
         font-weight: 600;
+        margin: 10px 0;
     }
 
     ion-card-content {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding-bottom: 24px;
+        padding-bottom: 30px;
 
         .weather-visual img {
-            width: 110px;
-            height: 110px;
-            margin-top: -20px;
-            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+            width: 120px;
+            height: 120px;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
         }
 
         .weather-details {
             display: flex;
             justify-content: space-around;
             width: 100%;
-            margin-top: 24px;
-            background: rgba(0, 0, 0, 0.2);
-            /* Darker glass on card */
-            border-radius: 16px;
-            padding: 12px 0;
-            backdrop-filter: blur(5px);
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.03); // Very subtle highlight
+            border-radius: 20px;
+            padding: 15px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
 
             .detail-item {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                gap: 6px;
 
                 span {
-                    font-size: 0.8em;
-                    opacity: 0.9;
-                    margin-bottom: 4px;
+                    font-size: 0.75em;
+                    color: #888; // Muted label
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
                 }
 
                 strong {
                     font-size: 1.1em;
                     font-weight: 700;
+                    color: #eee;
                 }
             }
         }
