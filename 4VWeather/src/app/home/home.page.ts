@@ -105,40 +105,44 @@ export class HomePage implements OnInit {
     const now = new Date();
     const currentDay = now.getDate();
 
-    // 1. Hourly: Interpolate strictly to get 1h intervals for the immediate future
-    // We linearly interpolate the first chunk of data to ensure we have the next 24h hour-by-hour
-    const itemsToInterpolate = list.slice(0, 10); // Take enough 3h chunks to cover >24h
+    // Obtener las próximas 24h (8 bloques de 3h) para interpolar
+    const itemsToInterpolate = list.slice(0, 10); 
     const hourlyFull = this.interpolateHourlyData(itemsToInterpolate);
-    this.hourlyForecast = hourlyFull.slice(0, 24); // Exactly next 24 hours
+    this.hourlyForecast = hourlyFull.slice(0, 24); 
 
-    // 2. Daily: "Next 4 Days" (Original 3h data)
-    // Group by Day (Local Time) to align with user's perception of "Tomorrow"
+    // Agrupar los días siguientes (excluyendo hoy)
     const grouped: any = {};
     
     for (const item of list) {
        const itemDate = new Date(item.dt * 1000);
-       const dayKey = itemDate.toISOString().slice(0, 10); // Use ISO Key for sorting uniqueness
+       const dayKey = itemDate.toISOString().slice(0, 10);
        
-       // Strict check: Only include if it is NOT today (Local day comparison)
+       // Filtrar solo días futuros
        if (itemDate.getDate() !== currentDay) {
            if (!grouped[dayKey]) grouped[dayKey] = [];
            grouped[dayKey].push(item);
        }
     }
 
-    // Convert to array and take next 4
+    // Convertir a array y limitar a 4 días
     this.forecast = Object.keys(grouped).sort().slice(0, 4).map(dateKey => ({
       date: dateKey,
       items: grouped[dateKey]
     }));
   }
   
-  // Helper for Spanish Date in Template
+  /**
+   * Formatea una fecha string a formato largo en español (ej: "Viernes, 23 Enero")
+   */
   getSpanishDate(dateStr: string): string {
       const date = new Date(dateStr);
       return new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
   }
 
+  /**
+   * Interpola linealmente los datos de temperatura y tiempo para generar
+   * intervalos de 1 hora a partir de datos de 3 horas.
+   */
   interpolateHourlyData(items: any[]): any[] {
       const result: any[] = [];
       
@@ -148,34 +152,28 @@ export class HomePage implements OnInit {
           
           result.push(current);
           
-          // Interpolate 2 intermediate points (t+1, t+2)
+          // Generar 2 puntos intermedios (t+1h, t+2h)
           for (let j = 1; j <= 2; j++) {
-              // Deep clone
               const interpolated = JSON.parse(JSON.stringify(current));
               
-              // Time Math using Timestamps (dt is seconds)
               const currentDt = current.dt;
               const nextDt = next.dt;
-              const dtDiff = nextDt - currentDt; // Should be 10800 seconds (3h)
+              const dtDiff = nextDt - currentDt;
               
               const interpDt = currentDt + (dtDiff * (j / 3));
               
-              // Updates
               interpolated.dt = Math.floor(interpDt);
-              // Update dt_txt for display consistency if used
               interpolated.dt_txt = new Date(interpDt * 1000).toISOString().replace('T', ' ').slice(0, 19);
               
-              // Temp Interpolation
+              // Interpolación lineal de temperatura
               const tempDiff = next.main.temp - current.main.temp;
               interpolated.main.temp = current.main.temp + (tempDiff * (j / 3));
               
-              // Basic distinct key to avoid ngFor errors if strict tracking used
-              interpolated.interpolated = true; 
+              interpolated.interpolated = true; // Flag interno
 
               result.push(interpolated);
           }
       }
-      
       return result;
   }
 
