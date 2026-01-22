@@ -1,7 +1,7 @@
 <div class="days-container" *ngIf="forecast && forecast.length > 0">
   <div class="day-block" *ngFor="let day of forecast">
     <div class="day-header">
-      <h3>{{ day.date | date:'EEEE, d MMM' | titlecase }}</h3>
+      <h3>{{ getSpanishDate(day.date) | titlecase }}</h3>
       <span class="max-temp" *ngIf="day.items && day.items.length > 0">Max: {{ getMaxTemp(day.items) | number:'1.0-0' }}°</span>
     </div>
     

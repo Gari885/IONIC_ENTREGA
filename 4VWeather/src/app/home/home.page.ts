@@ -104,21 +104,11 @@ export class HomePage implements OnInit {
     const list = data.list;
     const today = new Date().toISOString().slice(0, 10);
 
-    // 1. "Today" forecast (Interpolated to 1-hour intervals)
-    // Filter items that belong to today (or very close future). 
-    // We strictly want "Today" displayed hour-by-hour.
-    const todayItems = list.filter((item: any) => item.dt_txt.startsWith(today));
-    
-    // If we have items, interpolate them to get 1h gaps
-    if (todayItems.length > 0) {
-        this.hourlyForecast = this.interpolateHourlyData(todayItems);
-    } else {
-        // Fallback if late at night: take next available and interpolate
-        this.hourlyForecast = this.interpolateHourlyData(list.slice(0, 3)); 
-    }
-    
-    // Limit to next ~24h visible (e.g., 24 slots)
-    this.hourlyForecast = this.hourlyForecast.slice(0, 24);
+    // 1. Hourly Forecast (Next 24 Hours)
+    // Instead of strictly filtering "Today" (which breaks at night), 
+    // we take the next 8 items (8 * 3h = 24h) and interpolate them.
+    const next24hItems = list.slice(0, 9); // Take 9 to cover the interpolation gap to the 24th hour
+    this.hourlyForecast = this.interpolateHourlyData(next24hItems).slice(0, 24);
 
     // 2. Next 4 Days (Excluding today)
     const grouped: any = {};
@@ -133,8 +123,15 @@ export class HomePage implements OnInit {
     // Ensure we have exactly 4 days
     this.forecast = Object.keys(grouped).slice(0, 4).map(date => ({
       date: date,
-      items: grouped[date] // This strictly contains the 3h intervals for that day
+      items: grouped[date] 
     }));
+  }
+
+  // Helper for Spanish Date in Template
+  getSpanishDate(dateStr: string): string {
+      const date = new Date(dateStr);
+      // Format: "Viernes, 23 Enero"
+      return new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
   }
 
   interpolateHourlyData(items: any[]): any[] {
@@ -144,22 +141,20 @@ export class HomePage implements OnInit {
           const current = items[i];
           const next = items[i+1];
           
-          // Add current (original)
           result.push(current);
           
-          // Interpolate 2 intermediate points (t+1, t+2)
           for (let j = 1; j <= 2; j++) {
-              // Clone current structure
               const interpolated = JSON.parse(JSON.stringify(current));
               
-              // Calculate interpolated time
               const currentTime = new Date(current.dt_txt).getTime();
               const nextTime = new Date(next.dt_txt).getTime();
-              const timeDiff = nextTime - currentTime; // Should be 3 hours (10800000 ms)
+              const timeDiff = nextTime - currentTime; 
+              
+              // Only interpolate if gap is close to 3h (avoid spanning large gaps if data is missing)
+              // OpenWeather 'list' is usually contiguous.
               const interpTime = currentTime + (timeDiff * (j / 3));
               interpolated.dt_txt = new Date(interpTime).toISOString().replace('T', ' ').slice(0, 19);
               
-              // Interpolate Temperature
               const tempDiff = next.main.temp - current.main.temp;
               interpolated.main.temp = current.main.temp + (tempDiff * (j / 3));
 
@@ -167,9 +162,7 @@ export class HomePage implements OnInit {
           }
       }
       
-      // Add the very last item if we didn't cover it (though loop goes to length-1, so we should append last item or handle it)
-      // The logic above adds 'current' then 2 interpolated. 
-      // We need to push the last item of the array specifically if loop finishes.
+      // Ensure we catch the last one if needed, but slice(0,24) handles the cutoff
       if (items.length > 0) {
           result.push(items[items.length - 1]);
       }

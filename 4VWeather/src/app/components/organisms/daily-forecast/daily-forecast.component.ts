@@ -23,4 +23,9 @@ export class DailyForecastComponent {
   getMaxTemp(items: any[]): number {
     return Math.max(...items.map(i => i.main.temp));
   }
+
+  getSpanishDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
+  }
 }
