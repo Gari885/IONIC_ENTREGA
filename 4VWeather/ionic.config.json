@@ -1,0 +1,7 @@
+{
+  "name": "4VWeather",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
