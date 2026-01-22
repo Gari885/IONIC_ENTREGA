@@ -1,44 +1,55 @@
 .weather-card {
-    --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    // Vibrant Purple Gradient to match the premium look
+    --background: linear-gradient(135deg, #7F00FF 0%, #E100FF 100%);
+    // Or stick to the deep violet/blue:
+    --background: linear-gradient(135deg, #6200EA 0%, #9D46FF 100%);
+
     color: white;
     border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 6px 6px rgba(0, 0, 0, 0.3);
     margin-inline: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 
     ion-card-header {
         text-align: center;
     }
 
     ion-card-subtitle {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.9);
         font-size: 1.1em;
+        font-weight: 500;
     }
 
     .temp-title {
-        font-size: 4em;
+        font-size: 4.5em;
+        /* Bigger */
         color: white;
-        font-weight: 300;
+        font-weight: 600;
     }
 
     ion-card-content {
         display: flex;
         flex-direction: column;
         align-items: center;
+        padding-bottom: 24px;
 
         .weather-visual img {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             margin-top: -20px;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
         }
 
         .weather-details {
             display: flex;
             justify-content: space-around;
             width: 100%;
-            margin-top: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 10px;
+            margin-top: 24px;
+            background: rgba(0, 0, 0, 0.2);
+            /* Darker glass on card */
+            border-radius: 16px;
+            padding: 12px 0;
+            backdrop-filter: blur(5px);
 
             .detail-item {
                 display: flex;
@@ -47,12 +58,13 @@
 
                 span {
                     font-size: 0.8em;
-                    opacity: 0.8;
+                    opacity: 0.9;
+                    margin-bottom: 4px;
                 }
 
                 strong {
-                    font-size: 1em;
-                    margin-top: 4px;
+                    font-size: 1.1em;
+                    font-weight: 700;
                 }
             }
         }

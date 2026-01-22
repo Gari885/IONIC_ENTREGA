@@ -1,11 +1,18 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-title>
-      <div class="header-content">
-        <ion-icon name="location-outline"></ion-icon>
-        <span>{{ cityName || '4VWeather' }}</span>
-      </div>
-    </ion-title>
+    <ion-buttons slot="start" class="logo-container">
+       <div class="logo" (click)="loadCurrentLocationWeather()" style="cursor: pointer;">
+          <ion-icon name="cloudy-night-outline"></ion-icon>
+          <span>4VWeather</span>
+       </div>
+    </ion-buttons>
+    
+    <ion-buttons slot="end">
+       <div class="current-city" *ngIf="cityName">
+            <ion-icon name="location-outline"></ion-icon>
+            <span>{{ cityName }}</span>
+       </div>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

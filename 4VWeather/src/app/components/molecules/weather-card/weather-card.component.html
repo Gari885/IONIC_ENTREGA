@@ -16,8 +16,14 @@
         <span>Humedad</span>
         <strong>{{ weather.main.humidity }}%</strong>
       </div>
-      <!-- Add UV index if available (Pro API or OneCall usually, but current weather standard might not have it unless using OneCall) -->
-      <!-- Standard 'current' API usually doesn't have UV. UV is a separate endpoint or OneCall. We will skip UV for now to keep it simple as we are using standard endpoints, or just show placeholders. -->
+      <div class="detail-item">
+        <span>Precipitación</span>
+        <strong>{{ (weather.rain ? weather.rain['1h'] : 0) || (weather.snow ? weather.snow['1h'] : 0) }} mm</strong>
+      </div>
+      <div class="detail-item" *ngIf="weather.uvIndex !== undefined">
+        <span>Índice UV</span>
+        <strong>{{ weather.uvIndex | number:'1.0-0' }}</strong>
+      </div>
     </div>
   </ion-card-content>
 </ion-card>

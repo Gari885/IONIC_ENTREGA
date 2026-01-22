@@ -1,12 +1,31 @@
-<ion-list *ngIf="forecast && forecast.length > 0">
-  <ion-item *ngFor="let item of forecast">
-    <ion-label>
-      <h3>{{ item.dt_txt | date:'EEEE' | titlecase }}</h3> <!-- Needs locale for Spanish name, defaulting to English logic but Angular locale can fix or custom pipe -->
-      <p>{{ item.weather[0].description }}</p>
-    </ion-label>
-    <div slot="end" class="end-slot">
-      <img [src]="getIconUrl(item.weather[0].icon)" alt="icon" style="width: 40px; vertical-align: middle;">
-      <ion-note color="dark" class="temp-note">{{ item.main.temp | number:'1.0-0' }}°C</ion-note>
+<ion-accordion-group *ngIf="forecast && forecast.length > 0">
+  <ion-accordion *ngFor="let day of forecast">
+    <ion-item slot="header" color="light">
+      <ion-label>
+        <h3>{{ day.date | date:'EEEE, d MMM' | titlecase }}</h3>
+        <p>Ver previsión por horas</p>
+      </ion-label>
+      <!-- Show summary icon/temp from mid-day item (approx index 4 or middle) -->
+      <div slot="end" class="end-slot" *ngIf="day.items && day.items.length > 0">
+        <img [src]="getIconUrl(day.items[Math.floor(day.items.length / 2)].weather[0].icon)" alt="icon" style="width: 30px;">
+        <ion-note slot="end" class="temp-note">
+           Max: {{ getMaxTemp(day.items) | number:'1.0-0' }}°
+        </ion-note>
+      </div>
+    </ion-item>
+    
+    <div class="ion-padding" slot="content">
+      <div class="hourly-list">
+        <div class="hourly-row" *ngFor="let item of day.items">
+           <span class="time">{{ item.dt_txt | date:'HH:mm' }}</span>
+           <div class="icon-container">
+             <img [src]="getIconUrl(item.weather[0].icon)" alt="small-icon">
+             <span class="desc">{{ item.weather[0].description }}</span>
+           </div>
+           <strong class="temp">{{ item.main.temp | number:'1.0-0' }}°C</strong>
+           <span class="precip" *ngIf="item.pop > 0">💧 {{ (item.pop * 100) | number:'1.0-0' }}%</span>
+        </div>
+      </div>
     </div>
-  </ion-item>
-</ion-list>
+  </ion-accordion>
+</ion-accordion-group>

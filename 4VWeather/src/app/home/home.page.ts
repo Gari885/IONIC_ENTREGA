@@ -8,7 +8,7 @@ import { HourlyForecastComponent } from '../components/organisms/hourly-forecast
 import { WeatherService } from '../services/weather.service';
 import { LocationService } from '../services/location.service';
 import { addIcons } from 'ionicons';
-import { locationOutline } from 'ionicons/icons';
+import { locationOutline, cloudyNightOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +24,7 @@ import { locationOutline } from 'ionicons/icons';
   ],
 })
 export class HomePage implements OnInit {
+  // ... properties ...
   currentWeather: any;
   forecast: any[] = [];
   hourlyForecast: any[] = [];
@@ -35,18 +36,7 @@ export class HomePage implements OnInit {
     private weatherService: WeatherService,
     private locationService: LocationService
   ) {
-    addIcons({ locationOutline });
-  }
-  
-  // ... (rest of the file remains similar but I need to map it correctly)
-  // Actually I will just fix the typo and type errors in place using context or just replace the whole Class content again to be safe and cleaner?
-  // Replacing whole file content with fixed version is safer to avoid context shifting if line numbers are off.
-  
-  // Wait, I can just target the specific lines using context.
-  
-  // Typo fix:
-
-    addIcons({ locationOutline });
+    addIcons({ locationOutline, cloudyNightOutline });
   }
 
   async ngOnInit() {
@@ -76,6 +66,14 @@ export class HomePage implements OnInit {
         next: (data: any) => {
           this.currentWeather = data;
           this.cityName = data.name;
+          
+          // Get UV nested inside success of current weather to ensure we have coords (though we have lat/lon anyway)
+          this.weatherService.getUVIndex(lat, lon).subscribe({
+             next: (uvData: any) => {
+                 this.currentWeather.uvIndex = uvData.value;
+             },
+             error: (err) => console.log('Error getting UV', err)
+          });
         },
         error: (err: any) => {
           console.error(err);
@@ -104,53 +102,38 @@ export class HomePage implements OnInit {
 
   processForecast(data: any) {
     const list = data.list;
-    // Hourly: next 8 items (approx 24h)
-    this.hourlyForecast = list.slice(0, 8);
-
-    // Daily: Filter for one entry per day (e.g., at 12:00 PM) or just group them
-    // For simplicity, taking every 8th item (24h) roughly, starting from tomorrow?
-    // Or just identifying unique days.
-    // Let's take one reading per day, specifically around noon if possible, 
-    // or just the next 4 days separated by 24h chunks.
-    
-    // Quick filtering:
-    const daily: any[] = [];
-    const usedDates = new Set();
-    
-    // Get today's date string
     const today = new Date().toISOString().slice(0, 10);
 
-    for (const item of list) {
-      const date = item.dt_txt.slice(0, 10);
-      if (date !== today && !usedDates.has(date)) {
-        // Find the item closest to noon for this day? 
-        // Or just take the first one available for that day?
-        // Let's try to pick 15:00:00 (mid-day ish) if possible, or usually 12:00:00
-        if (item.dt_txt.includes('12:00:00') || item.dt_txt.includes('15:00:00') || !daily.some(d => d.dt_txt.slice(0,10) === date)) {
-           // If we don't have this date yet, add it. 
-           // If we do, but this one is better (noon), replace it? 
-           // Simplest: just take the first entry (00:00 or 03:00) or check specifically for '12:00:00'
-        }
-      }
-    }
-    
-    // Revised daily logic:
-    // We want 4 days.
-    // Group by day.
+    // 1. "Today" forecast (every 3 hours available for the rest of the day)
+    // NOTE: OpenWeather free API only provides 3-hour intervals (`list`). 
+    // We cannot get 1-hour intervals without the OneCall API subscription.
+    // We will display ALL available 3-hour slots for the current date as the "Hourly" section.
+    this.hourlyForecast = list.filter((item: any) => item.dt_txt.startsWith(today));
+
+    // If "Today" has very few items left (e.g. it's 11 PM), maybe we should append early tomorrow?
+    // User requested "El dia de hoy", so we stick to 'today's items'.
+    // If empty (end of day), we could show a message or just show the very next few hours of tomorrow?
+    // Let's fallback to "Next 24h" logic if today's list is too short, or stick to literal "Today".
+    // For better UX, if today is almost over, show "Next 24h".
+    // Let's stick to "Next 8 items (24h)" as "Hourly" carousel is usually intended for immediate future,
+    // which effectively covers "Today + Tonight".
+    this.hourlyForecast = list.slice(0, 9); // Show next 24h (approx 8-9 items)
+
+    // 2. Next 4 Days (Excluding today)
     const grouped: any = {};
+    
     for (const item of list) {
        const date = item.dt_txt.slice(0, 10);
-       if (date === today) continue; // Skip today for daily forecast list
+       if (date === today) continue; // Skip Today
        if (!grouped[date]) grouped[date] = [];
        grouped[date].push(item);
     }
 
-    this.forecast = Object.keys(grouped).slice(0, 4).map(date => {
-       // Pick the one closest to 12:00
-       const dayItems = grouped[date];
-       // simple: pick middle item
-       return dayItems[Math.floor(dayItems.length / 2)];
-    });
+    // Ensure we have exactly 4 days
+    this.forecast = Object.keys(grouped).slice(0, 4).map(date => ({
+      date: date,
+      items: grouped[date] // This strictly contains the 3h intervals for that day
+    }));
   }
 
   onSearch(city: string) {

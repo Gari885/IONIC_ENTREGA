@@ -23,4 +23,10 @@ export class WeatherService {
   getForecast(lat: number, lon: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/forecast?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${this.apiKey}`);
   }
+
+  getUVIndex(lat: number, lon: number): Observable<any> {
+    // Current UV API: https://api.openweathermap.org/data/2.5/uvi?lat={lat}&lon={lon}&appid={API key}
+    // Or OneCall if available, but sticking to standard keys:
+    return this.http.get<any>(`${this.apiUrl}/uvi?lat=${lat}&lon=${lon}&appid=${this.apiKey}`);
+  }
 }
