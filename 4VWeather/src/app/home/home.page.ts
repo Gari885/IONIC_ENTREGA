@@ -102,35 +102,40 @@ export class HomePage implements OnInit {
 
   processForecast(data: any) {
     const list = data.list;
-    const today = new Date().toISOString().slice(0, 10);
+    const now = new Date();
+    const currentDay = now.getDate();
 
-    // 1. Hourly Forecast (Next 24 Hours)
-    // Instead of strictly filtering "Today" (which breaks at night), 
-    // we take the next 8 items (8 * 3h = 24h) and interpolate them.
-    const next24hItems = list.slice(0, 9); // Take 9 to cover the interpolation gap to the 24th hour
-    this.hourlyForecast = this.interpolateHourlyData(next24hItems).slice(0, 24);
+    // 1. Hourly: Interpolate strictly to get 1h intervals for the immediate future
+    // We linearly interpolate the first chunk of data to ensure we have the next 24h hour-by-hour
+    const itemsToInterpolate = list.slice(0, 10); // Take enough 3h chunks to cover >24h
+    const hourlyFull = this.interpolateHourlyData(itemsToInterpolate);
+    this.hourlyForecast = hourlyFull.slice(0, 24); // Exactly next 24 hours
 
-    // 2. Next 4 Days (Excluding today)
+    // 2. Daily: "Next 4 Days" (Original 3h data)
+    // Group by Day (Local Time) to align with user's perception of "Tomorrow"
     const grouped: any = {};
     
     for (const item of list) {
-       const date = item.dt_txt.slice(0, 10);
-       if (date === today) continue; // Skip Today
-       if (!grouped[date]) grouped[date] = [];
-       grouped[date].push(item);
+       const itemDate = new Date(item.dt * 1000);
+       const dayKey = itemDate.toISOString().slice(0, 10); // Use ISO Key for sorting uniqueness
+       
+       // Strict check: Only include if it is NOT today (Local day comparison)
+       if (itemDate.getDate() !== currentDay) {
+           if (!grouped[dayKey]) grouped[dayKey] = [];
+           grouped[dayKey].push(item);
+       }
     }
 
-    // Ensure we have exactly 4 days
-    this.forecast = Object.keys(grouped).slice(0, 4).map(date => ({
-      date: date,
-      items: grouped[date] 
+    // Convert to array and take next 4
+    this.forecast = Object.keys(grouped).sort().slice(0, 4).map(dateKey => ({
+      date: dateKey,
+      items: grouped[dateKey]
     }));
   }
-
+  
   // Helper for Spanish Date in Template
   getSpanishDate(dateStr: string): string {
       const date = new Date(dateStr);
-      // Format: "Viernes, 23 Enero"
       return new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
   }
 
@@ -143,28 +148,32 @@ export class HomePage implements OnInit {
           
           result.push(current);
           
+          // Interpolate 2 intermediate points (t+1, t+2)
           for (let j = 1; j <= 2; j++) {
+              // Deep clone
               const interpolated = JSON.parse(JSON.stringify(current));
               
-              const currentTime = new Date(current.dt_txt).getTime();
-              const nextTime = new Date(next.dt_txt).getTime();
-              const timeDiff = nextTime - currentTime; 
+              // Time Math using Timestamps (dt is seconds)
+              const currentDt = current.dt;
+              const nextDt = next.dt;
+              const dtDiff = nextDt - currentDt; // Should be 10800 seconds (3h)
               
-              // Only interpolate if gap is close to 3h (avoid spanning large gaps if data is missing)
-              // OpenWeather 'list' is usually contiguous.
-              const interpTime = currentTime + (timeDiff * (j / 3));
-              interpolated.dt_txt = new Date(interpTime).toISOString().replace('T', ' ').slice(0, 19);
+              const interpDt = currentDt + (dtDiff * (j / 3));
               
+              // Updates
+              interpolated.dt = Math.floor(interpDt);
+              // Update dt_txt for display consistency if used
+              interpolated.dt_txt = new Date(interpDt * 1000).toISOString().replace('T', ' ').slice(0, 19);
+              
+              // Temp Interpolation
               const tempDiff = next.main.temp - current.main.temp;
               interpolated.main.temp = current.main.temp + (tempDiff * (j / 3));
+              
+              // Basic distinct key to avoid ngFor errors if strict tracking used
+              interpolated.interpolated = true; 
 
               result.push(interpolated);
           }
-      }
-      
-      // Ensure we catch the last one if needed, but slice(0,24) handles the cutoff
-      if (items.length > 0) {
-          result.push(items[items.length - 1]);
       }
       
       return result;
