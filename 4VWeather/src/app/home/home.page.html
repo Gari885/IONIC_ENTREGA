@@ -1,20 +1,43 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      Blank
+      <div class="header-content">
+        <ion-icon name="location-outline"></ion-icon>
+        <span>{{ cityName || '4VWeather' }}</span>
+      </div>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <div class="main-container">
+    
+    <app-search-bar (search)="onSearch($event)"></app-search-bar>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <div *ngIf="loading" class="loading-container">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Cargando pronóstico...</p>
+    </div>
+
+    <div *ngIf="error" class="error-container">
+      <p>{{ error }}</p>
+      <ion-button (click)="loadCurrentLocationWeather()" fill="outline">Intentar de nuevo</ion-button>
+    </div>
+
+    <div *ngIf="!loading && !error && currentWeather">
+      
+      <app-weather-card [weather]="currentWeather"></app-weather-card>
+
+      <div class="section-title">
+        <h3>Próximas 24 Horas / Hoy</h3>
+      </div>
+      <app-hourly-forecast [forecast]="hourlyForecast"></app-hourly-forecast>
+
+      <div class="section-title">
+        <h3>Próximos 4 Días</h3>
+      </div>
+      <app-daily-forecast [forecast]="forecast"></app-daily-forecast>
+
+    </div>
   </div>
 </ion-content>

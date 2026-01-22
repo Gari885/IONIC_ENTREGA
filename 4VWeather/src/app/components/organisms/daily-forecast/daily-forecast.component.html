@@ -1,3 +1,12 @@
-<p>
-  daily-forecast works!
-</p>
+<ion-list *ngIf="forecast && forecast.length > 0">
+  <ion-item *ngFor="let item of forecast">
+    <ion-label>
+      <h3>{{ item.dt_txt | date:'EEEE' | titlecase }}</h3> <!-- Needs locale for Spanish name, defaulting to English logic but Angular locale can fix or custom pipe -->
+      <p>{{ item.weather[0].description }}</p>
+    </ion-label>
+    <div slot="end" class="end-slot">
+      <img [src]="getIconUrl(item.weather[0].icon)" alt="icon" style="width: 40px; vertical-align: middle;">
+      <ion-note color="dark" class="temp-note">{{ item.main.temp | number:'1.0-0' }}°C</ion-note>
+    </div>
+  </ion-item>
+</ion-list>

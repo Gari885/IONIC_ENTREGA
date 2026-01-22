@@ -1,3 +1,10 @@
-<p>
-  search-bar works!
-</p>
+<ion-item lines="none" class="search-container">
+  <ion-input
+    placeholder="Buscar ciudad..."
+    [(ngModel)]="searchTerm"
+    (keyup.enter)="onSearch()"
+  ></ion-input>
+  <ion-button (click)="onSearch()" fill="clear">
+    <ion-icon slot="icon-only" name="search-outline"></ion-icon>
+  </ion-button>
+</ion-item>

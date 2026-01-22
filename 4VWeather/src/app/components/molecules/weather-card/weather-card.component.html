@@ -1,3 +1,23 @@
-<p>
-  weather-card works!
-</p>
+<ion-card *ngIf="weather" class="weather-card">
+  <ion-card-header>
+    <ion-card-subtitle>{{ weather.weather[0].description | titlecase }}</ion-card-subtitle>
+    <ion-card-title class="temp-title">{{ weather.main.temp | number:'1.0-0' }}°C</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="weather-visual">
+      <img [src]="getIconUrl(weather.weather[0].icon)" alt="Weather Icon">
+    </div>
+    <div class="weather-details">
+      <div class="detail-item">
+        <span>Viento</span>
+        <strong>{{ weather.wind.speed }} m/s</strong>
+      </div>
+      <div class="detail-item">
+        <span>Humedad</span>
+        <strong>{{ weather.main.humidity }}%</strong>
+      </div>
+      <!-- Add UV index if available (Pro API or OneCall usually, but current weather standard might not have it unless using OneCall) -->
+      <!-- Standard 'current' API usually doesn't have UV. UV is a separate endpoint or OneCall. We will skip UV for now to keep it simple as we are using standard endpoints, or just show placeholders. -->
+    </div>
+  </ion-card-content>
+</ion-card>

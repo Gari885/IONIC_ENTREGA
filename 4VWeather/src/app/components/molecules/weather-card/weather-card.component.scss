@@ -1,0 +1,60 @@
+.weather-card {
+    --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    margin-inline: 0;
+
+    ion-card-header {
+        text-align: center;
+    }
+
+    ion-card-subtitle {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 1.1em;
+    }
+
+    .temp-title {
+        font-size: 4em;
+        color: white;
+        font-weight: 300;
+    }
+
+    ion-card-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .weather-visual img {
+            width: 100px;
+            height: 100px;
+            margin-top: -20px;
+        }
+
+        .weather-details {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 10px;
+
+            .detail-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                span {
+                    font-size: 0.8em;
+                    opacity: 0.8;
+                }
+
+                strong {
+                    font-size: 1em;
+                    margin-top: 4px;
+                }
+            }
+        }
+    }
+}
