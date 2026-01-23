@@ -55,9 +55,10 @@ export class HomePage implements OnInit {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
       await this.getWeatherData(lat, lon);
-    } catch (err) {
-      this.error = 'No se pudo obtener la ubicación. Por favor, busca una ciudad.';
-      this.loading = false;
+    } catch (err: any) {
+      console.error('Geolocation failed:', err && err.message ? err.message : err);
+      // Fallback to a default city instead of showing nothing
+      this.onSearch('Pamplona');
     }
   }
 
@@ -209,5 +210,10 @@ export class HomePage implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  resetHome() {
+    this.cityName = ''; // Clear search context if any
+    this.loadCurrentLocationWeather();
   }
 }

@@ -13,7 +13,7 @@ export class WeatherService {
   constructor(private http: HttpClient) { }
 
   getCoordinates(city: string): Observable<any[]> {
-    return this.http.get<any[]>(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${this.apiKey}`);
+    return this.http.get<any[]>(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${this.apiKey}`);
   }
 
   getCurrentWeather(lat: number, lon: number, lang: string = 'es'): Observable<any> {

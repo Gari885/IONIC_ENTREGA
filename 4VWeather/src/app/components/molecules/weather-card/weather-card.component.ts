@@ -30,6 +30,6 @@ export class WeatherCardComponent implements OnInit, OnDestroy {
   }
 
   getIconUrl(icon: string): string {
-    return `http://openweathermap.org/img/wn/${icon}@4x.png`;
+    return `https://openweathermap.org/img/wn/${icon}@4x.png`;
   }
 }

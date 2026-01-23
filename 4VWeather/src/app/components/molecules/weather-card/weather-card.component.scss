@@ -11,23 +11,25 @@
 
     ion-card-header {
         text-align: center;
-        padding-top: 20px;
-        position: relative; // Context for absolute positioning
+        padding-top: 40px; // Increased padding to make room for absolute absolute city name
+        position: relative;
 
         .city-name {
             position: absolute;
             top: 20px;
-            left: 24px;
-            font-size: 1.4rem;
+            left: 20px;
+            font-size: 1.1rem; // Slightly smaller to fit
             font-weight: 700;
-            color: #333; // Dark text for contrast against light brown
+            color: #4a4a4a;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            opacity: 0.8;
+            opacity: 0.9;
+            z-index: 10;
         }
 
         .current-time {
-            font-size: 2em;
+            font-size: 2.2em; // Make time bigger and clearer
+            margin-top: 10px; // Push down to avoid overlap
             font-weight: 300;
             color: #fff;
             margin-bottom: 5px;

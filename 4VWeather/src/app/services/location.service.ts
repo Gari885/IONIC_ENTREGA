@@ -12,7 +12,10 @@ export class LocationService {
       if (!navigator.geolocation) {
         reject('Geolocation is not supported by this browser.');
       } else {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          timeout: 5000, // Timeout after 5 seconds
+          enableHighAccuracy: false
+        });
       }
     });
   }
