@@ -19,18 +19,19 @@
   align-items: center;
   justify-content: center;
 
-  background: #1e1e1e; // Dark background
+  // Warm Grey Background
+  background: #3e3b38;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(60, 50, 40, 0.15);
 
   border-radius: 16px;
   padding: 16px 0;
-  color: white;
+  color: #f0f0f0;
 
   .time {
     font-size: 0.9em;
     font-weight: 600;
-    color: #aaa;
+    color: #c0b8b0;
     margin-bottom: 6px;
   }
 
@@ -43,6 +44,6 @@
     font-weight: 700;
     font-size: 1.1em;
     margin-top: 4px;
-    color: white;
+    color: #f7f5f2;
   }
 }

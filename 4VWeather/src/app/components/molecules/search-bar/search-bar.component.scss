@@ -1,19 +1,19 @@
 .search-container {
-    --background: #1e1e1e; // Dark card background
+    --background: #3e3b38; // Warm Grey
     --color: white;
     --padding-start: 10px;
     --border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px rgba(60, 50, 40, 0.15);
     margin-bottom: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 
     ion-input {
-        --placeholder-color: #aaa;
+        --placeholder-color: #a8a098;
         --color: white;
         font-weight: 500;
     }
 
     ion-button {
-        --color: #bb86fc;
+        --color: #dcbfa6; // Warm accent
     }
 }

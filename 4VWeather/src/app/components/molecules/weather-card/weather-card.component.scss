@@ -1,15 +1,13 @@
 .weather-card {
-    // "Colores más apagados como en lo de las 24h" -> Dark Grey/Slate
-    --background: #1e1e1e; // Matching the dark muted look
-    // Optional: subtle gradient to keep it premium but muted
-    background: linear-gradient(145deg, #232323 0%, #1a1a1a 100%);
+    // "Gris un poco más marrón un poco más claro" -> Warm Grey / Taupe
+    --background: #3e3b38;
+    background: linear-gradient(145deg, #46423f 0%, #383532 100%);
 
     color: white;
     border-radius: 24px;
-    // Stronger shadow for pop against light BG
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 15px 35px rgba(60, 50, 40, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
     margin-inline: 0;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
 
     ion-card-header {
         text-align: center;
@@ -17,7 +15,7 @@
     }
 
     ion-card-subtitle {
-        color: #a0a0a0; // Muted grey text
+        color: #c0b8b0; // Warmer muted text
         font-size: 1.1em;
         font-weight: 500;
         letter-spacing: 1px;
@@ -26,7 +24,7 @@
 
     .temp-title {
         font-size: 5em;
-        color: #f0f0f0;
+        color: #f7f5f2; // Warm white
         font-weight: 600;
         margin: 10px 0;
     }
@@ -40,7 +38,7 @@
         .weather-visual img {
             width: 120px;
             height: 120px;
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.3));
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
         }
 
         .weather-details {
@@ -48,7 +46,7 @@
             justify-content: space-around;
             width: 100%;
             margin-top: 30px;
-            background: rgba(255, 255, 255, 0.03); // Very subtle highlight
+            background: rgba(0, 0, 0, 0.15); // Darker tint for contrast
             border-radius: 20px;
             padding: 15px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -61,7 +59,7 @@
 
                 span {
                     font-size: 0.75em;
-                    color: #888; // Muted label
+                    color: #a8a098; // Warm muted label
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
                 }
