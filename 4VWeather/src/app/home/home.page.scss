@@ -4,7 +4,9 @@ ion-content {
 }
 
 .main-container {
-  max-width: 600px;
+  width: 100%;
+  max-width: 100%; // Remove the 600px limit
+  padding: 0 16px; // Small padding to avoid touching the edges
   margin: 0 auto;
   padding-bottom: 40px;
 }
