@@ -19,8 +19,11 @@ ion-content {
 }
 
 ion-toolbar {
-  --background: transparent;
-  --border-color: transparent;
+  // Fixed Header Style: "Que se note más"
+  --background: #f0f4f8; // Match the top of the content gradient or use white. Let's use the light grey.
+  --border-color: #d9e2ec;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); // Add shadow to make it stand out
   padding-top: 10px;
   padding-bottom: 10px;
 
@@ -42,32 +45,37 @@ ion-toolbar {
 
   .lang-switcher {
     display: flex;
-    gap: 12px;
-    margin-right: 16px;
+    gap: 16px;
+    margin-right: 20px;
     align-items: center;
-    z-index: 100; // Ensure clickable
+    z-index: 100;
 
     .lang-btn {
       cursor: pointer;
-      opacity: 0.6;
-      transition: all 0.2s ease-in-out;
+      opacity: 0.4; // Default inactive
+      filter: grayscale(100%);
+      transition: all 0.3s ease-in-out;
+      padding: 4px;
 
       img {
-        width: 34px;
+        width: 36px;
+        height: auto;
         border-radius: 4px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
 
       &:hover {
-        opacity: 0.9;
+        opacity: 0.7;
         transform: scale(1.05);
       }
 
       &.active {
         opacity: 1;
-        transform: scale(1.1);
-        box-shadow: 0 0 0 2px #5b9bd5; // Highlight ring
-        border-radius: 6px; // Enclose img
+        filter: grayscale(0%);
+        transform: scale(1.15);
+        // Removed blue box-shadow per user request ("quita el recuadro azul")
+        // box-shadow: 0 0 0 2px #5b9bd5; 
+        border-radius: 6px;
       }
     }
   }

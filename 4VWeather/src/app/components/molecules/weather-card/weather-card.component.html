@@ -1,5 +1,6 @@
 <ion-card *ngIf="weather" class="weather-card">
   <ion-card-header>
+    <div class="city-name">{{ weather.name }}</div>
     <div class="current-time">{{ currentTime | date:'HH:mm' }}</div>
     <ion-card-subtitle>{{ weather.weather[0].description | titlecase }}</ion-card-subtitle>
     <ion-card-title class="temp-title">{{ weather.main.temp | number:'1.0-0' }}°C</ion-card-title>
