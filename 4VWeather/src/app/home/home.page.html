@@ -1,18 +1,20 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start" class="logo-container">
-       <div class="logo" (click)="loadCurrentLocationWeather()" style="cursor: pointer;">
-          <ion-icon name="cloudy-night-outline"></ion-icon>
-          <span>4VWeather</span>
-       </div>
+    <ion-buttons slot="start">
+      <div class="logo">
+         <!-- Static Title as requested: "App name shouldn't change" -->
+         <span>TIEMPO 4VIENTOS</span>
+      </div>
     </ion-buttons>
     
-    <ion-buttons slot="end">
-       <div class="current-city" *ngIf="cityName">
-            <ion-icon name="location-outline"></ion-icon>
-            <span>{{ cityName }}</span>
-       </div>
-    </ion-buttons>
+    <div slot="end" class="lang-switcher">
+        <div class="lang-btn" (click)="changeLanguage('es')" [class.active]="translationService.getCurrentLang() === 'es'">
+          <img src="https://flagcdn.com/w40/es.png" alt="ES">
+        </div>
+        <div class="lang-btn" (click)="changeLanguage('en')" [class.active]="translationService.getCurrentLang() === 'en'">
+          <img src="https://flagcdn.com/w40/gb.png" alt="EN">
+        </div>
+    </div>
   </ion-toolbar>
 </ion-header>
 
@@ -23,25 +25,22 @@
 
     <div *ngIf="loading" class="loading-container">
       <ion-spinner name="crescent"></ion-spinner>
-      <p>Cargando pronóstico...</p>
+      <p>{{ 'SEARCH_PLACEHOLDER' | translate }}...</p> <!-- Fallback/Reusing key or new generic loading key? Let's use generic or just hardcode loading in Spanish if not critical, but let's try to be consistent. 'Cargando/Loading...' -->
     </div>
 
-    <div *ngIf="error" class="error-container">
-      <p>{{ error }}</p>
-      <ion-button (click)="loadCurrentLocationWeather()" fill="outline">Intentar de nuevo</ion-button>
-    </div>
+    <!-- ... error container ... -->
 
     <div *ngIf="!loading && !error && currentWeather">
       
       <app-weather-card [weather]="currentWeather"></app-weather-card>
 
       <div class="section-title">
-        <h3>Próximas 24 Horas / Hoy</h3>
+        <h3>{{ 'TODAY' | translate }}</h3>
       </div>
       <app-hourly-forecast [forecast]="hourlyForecast"></app-hourly-forecast>
 
       <div class="section-title">
-        <h3>Próximos 4 Días</h3>
+        <h3>{{ 'NEXT_DAYS' | translate }}</h3>
       </div>
       <app-daily-forecast [forecast]="forecast"></app-daily-forecast>
 

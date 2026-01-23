@@ -11,29 +11,64 @@ ion-content {
   padding-bottom: 40px;
 }
 
-.header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding-right: 16px;
+.img-flag {
+  width: 32px;
+  height: auto;
+  border-radius: 4px;
+  display: block;
+}
 
+ion-toolbar {
+  --background: transparent;
+  --border-color: transparent;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  // Flex container for toolbar items is handled by slots, but we can target the logo div
   .logo {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-weight: 800;
-    color: #333; // Dark text for light background
-
-    ion-icon {
-      font-size: 1.8em;
-      color: #333; // Dark icon
-    }
+    margin-left: 10px;
 
     span {
       font-family: sans-serif;
-      font-size: 1.1em;
-      letter-spacing: -0.5px;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #5b9bd5; // Light Blue Title
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+  }
+
+  .lang-switcher {
+    display: flex;
+    gap: 12px;
+    margin-right: 16px;
+    align-items: center;
+    z-index: 100; // Ensure clickable
+
+    .lang-btn {
+      cursor: pointer;
+      opacity: 0.6;
+      transition: all 0.2s ease-in-out;
+
+      img {
+        width: 34px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      &:hover {
+        opacity: 0.9;
+        transform: scale(1.05);
+      }
+
+      &.active {
+        opacity: 1;
+        transform: scale(1.1);
+        box-shadow: 0 0 0 2px #5b9bd5; // Highlight ring
+        border-radius: 6px; // Enclose img
+      }
     }
   }
 }

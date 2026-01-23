@@ -1,5 +1,6 @@
 <ion-card *ngIf="weather" class="weather-card">
   <ion-card-header>
+    <div class="current-time">{{ currentTime | date:'HH:mm' }}</div>
     <ion-card-subtitle>{{ weather.weather[0].description | titlecase }}</ion-card-subtitle>
     <ion-card-title class="temp-title">{{ weather.main.temp | number:'1.0-0' }}°C</ion-card-title>
   </ion-card-header>
@@ -9,19 +10,19 @@
     </div>
     <div class="weather-details">
       <div class="detail-item">
-        <span>Viento</span>
+        <span>{{ 'WIND' | translate }}</span>
         <strong>{{ weather.wind.speed }} m/s</strong>
       </div>
       <div class="detail-item">
-        <span>Humedad</span>
+        <span>{{ 'HUMIDITY' | translate }}</span>
         <strong>{{ weather.main.humidity }}%</strong>
       </div>
       <div class="detail-item">
-        <span>Precipitación</span>
+        <span>{{ 'PRECIPITATION' | translate }}</span>
         <strong>{{ (weather.rain ? weather.rain['1h'] : 0) || (weather.snow ? weather.snow['1h'] : 0) }} mm</strong>
       </div>
       <div class="detail-item" *ngIf="weather.uvIndex !== undefined">
-        <span>Índice UV</span>
+        <span>{{ 'UV_INDEX' | translate }}</span>
         <strong>{{ weather.uvIndex | number:'1.0-0' }}</strong>
       </div>
     </div>

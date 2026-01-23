@@ -1,17 +1,19 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslationService } from '../../../services/translation.service';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 
 @Component({
   selector: 'app-daily-forecast',
   templateUrl: './daily-forecast.component.html',
   styleUrls: ['./daily-forecast.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, TranslatePipe]
 })
 export class DailyForecastComponent {
   @Input() forecast: any[] = [];
 
-  constructor() {}
+  constructor(private translationService: TranslationService) {}
 
   Math = Math; // Make Math available in template
 
@@ -25,6 +27,7 @@ export class DailyForecastComponent {
 
   getSpanishDate(dateStr: string): string {
     const date = new Date(dateStr);
-    return new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
+    const lang = this.translationService.getCurrentLang() === 'en' ? 'en-US' : 'es-ES';
+    return new Intl.DateTimeFormat(lang, { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
   }
 }

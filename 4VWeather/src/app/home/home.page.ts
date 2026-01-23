@@ -5,10 +5,12 @@ import { SearchBarComponent } from '../components/molecules/search-bar/search-ba
 import { WeatherCardComponent } from '../components/molecules/weather-card/weather-card.component';
 import { DailyForecastComponent } from '../components/organisms/daily-forecast/daily-forecast.component';
 import { HourlyForecastComponent } from '../components/organisms/hourly-forecast/hourly-forecast.component';
+import { TranslationService } from '../services/translation.service';
 import { WeatherService } from '../services/weather.service';
 import { LocationService } from '../services/location.service';
+import { TranslatePipe } from '../pipes/translate.pipe';
 import { addIcons } from 'ionicons';
-import { locationOutline, cloudyNightOutline } from 'ionicons/icons';
+import { locationOutline, cloudyNightOutline, globeOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +22,8 @@ import { locationOutline, cloudyNightOutline } from 'ionicons/icons';
     SearchBarComponent,
     WeatherCardComponent,
     DailyForecastComponent,
-    HourlyForecastComponent
+    HourlyForecastComponent,
+    TranslatePipe
   ],
 })
 export class HomePage implements OnInit {
@@ -33,10 +36,11 @@ export class HomePage implements OnInit {
   cityName: string = '';
 
   constructor(
+    public translationService: TranslationService,
     private weatherService: WeatherService,
     private locationService: LocationService
   ) {
-    addIcons({ locationOutline, cloudyNightOutline });
+    addIcons({ locationOutline, cloudyNightOutline, globeOutline });
   }
 
   async ngOnInit() {
@@ -60,9 +64,11 @@ export class HomePage implements OnInit {
   async getWeatherData(lat: number, lon: number) {
     this.loading = true;
     this.error = null;
+    const lang = this.translationService.getCurrentLang(); // Get current language
+    
     try {
       // Get Current Weather
-      this.weatherService.getCurrentWeather(lat, lon).subscribe({
+      this.weatherService.getCurrentWeather(lat, lon, lang).subscribe({
         next: (data: any) => {
           this.currentWeather = data;
           this.cityName = data.name;
@@ -72,7 +78,7 @@ export class HomePage implements OnInit {
              next: (uvData: any) => {
                  this.currentWeather.uvIndex = uvData.value;
              },
-             error: (err) => console.log('Error getting UV', err)
+             error: (err: any) => console.log('Error getting UV', err)
           });
         },
         error: (err: any) => {
@@ -82,7 +88,7 @@ export class HomePage implements OnInit {
       });
 
       // Get Forecast
-      this.weatherService.getForecast(lat, lon).subscribe({
+      this.weatherService.getForecast(lat, lon, lang).subscribe({
         next: (data: any) => {
           this.processForecast(data);
           this.loading = false;
@@ -132,11 +138,19 @@ export class HomePage implements OnInit {
   }
   
   /**
-   * Formatea una fecha string a formato largo en español (ej: "Viernes, 23 Enero")
+   * Formatea una fecha string a formato largo en español o inglés
    */
   getSpanishDate(dateStr: string): string {
       const date = new Date(dateStr);
-      return new Intl.DateTimeFormat('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
+      const lang = this.translationService.getCurrentLang() === 'en' ? 'en-US' : 'es-ES';
+      return new Intl.DateTimeFormat(lang, { weekday: 'long', day: 'numeric', month: 'long' }).format(date);
+  }
+
+  changeLanguage(lang: string) {
+    this.translationService.setLanguage(lang);
+    this.loading = true; // Show loading while fetching with new language
+    // Reload weather with new/cached location
+    this.loadCurrentLocationWeather(); 
   }
 
   /**

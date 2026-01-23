@@ -16,12 +16,12 @@ export class WeatherService {
     return this.http.get<any[]>(`http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=${this.apiKey}`);
   }
 
-  getCurrentWeather(lat: number, lon: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/weather?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${this.apiKey}`);
+  getCurrentWeather(lat: number, lon: number, lang: string = 'es'): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/weather?lat=${lat}&lon=${lon}&units=metric&lang=${lang}&appid=${this.apiKey}`);
   }
 
-  getForecast(lat: number, lon: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/forecast?lat=${lat}&lon=${lon}&units=metric&lang=es&appid=${this.apiKey}`);
+  getForecast(lat: number, lon: number, lang: string = 'es'): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/forecast?lat=${lat}&lon=${lon}&units=metric&lang=${lang}&appid=${this.apiKey}`);
   }
 
   getUVIndex(lat: number, lon: number): Observable<any> {

@@ -6,12 +6,12 @@
 }
 
 .day-block {
-    // Warm Grey Background
-    background: #3e3b38;
+    // Darker Warm Brown Background (Same as Hourly)
+    background: #5e5750;
     border-radius: 16px;
     padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 10px rgba(60, 50, 40, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba(40, 35, 30, 0.2);
 
     .day-header {
         display: flex;
@@ -29,7 +29,7 @@
 
         .max-temp {
             font-size: 0.95em;
-            color: #dcbfa6; // Warm accent color (soft orange/brown)
+            color: #dcbfa6; // Warm accent color
             font-weight: 700;
         }
     }
@@ -50,35 +50,51 @@
     scrollbar-width: none;
 
     .carousel-item {
-        min-width: 70px;
+        min-width: 100px; // Increased size
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: rgba(0, 0, 0, 0.15); // Darker inner cards
+        background: rgba(0, 0, 0, 0.2); // Darker inner
         border-radius: 12px;
-        padding: 10px;
+        padding: 12px 8px;
 
         .time {
             font-size: 0.8em;
-            color: #c0b8b0;
+            color: #d8d0c8;
             margin-bottom: 4px;
         }
 
         img {
-            width: 35px;
-            height: 35px;
+            width: 40px; // Larger icon
+            height: 40px;
         }
 
         .temp {
             font-weight: 700;
-            font-size: 1em;
+            font-size: 1.1em;
             color: #f7f5f2;
+            margin: 4px 0;
         }
 
-        .precip {
-            font-size: 0.7em;
-            color: #8da4c4; // Muted blue for rain looks good on warm grey
-            margin-top: 4px;
+        .daily-details {
+            margin-top: 8px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+
+            .detail-row {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                font-size: 0.75em;
+                color: #b0a8a0;
+
+                span:last-child {
+                    color: #fff;
+                    font-weight: 600;
+                }
+            }
         }
     }
 }

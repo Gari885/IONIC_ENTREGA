@@ -1,17 +1,25 @@
 .weather-card {
-    // "Gris un poco más marrón un poco más claro" -> Warm Grey / Taupe
-    --background: #3e3b38;
-    background: linear-gradient(145deg, #46423f 0%, #383532 100%);
+    // "Gris un poco más marrón un poco más claro" -> Lighter Warm Brown / Taupe
+    --background: #8d8076;
+    background: linear-gradient(145deg, #9e9188 0%, #7d7269 100%);
 
     color: white;
     border-radius: 24px;
     box-shadow: 0 15px 35px rgba(60, 50, 40, 0.2), 0 5px 15px rgba(0, 0, 0, 0.1);
     margin-inline: 0;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2); // Slightly more visible border
 
     ion-card-header {
         text-align: center;
-        padding-top: 30px;
+        padding-top: 20px;
+
+        .current-time {
+            font-size: 2em;
+            font-weight: 300;
+            color: #fff;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
     }
 
     ion-card-subtitle {

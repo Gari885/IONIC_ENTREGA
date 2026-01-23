@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { TranslatePipe } from '../../../pipes/translate.pipe';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -6,7 +7,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './hourly-forecast.component.html',
   styleUrls: ['./hourly-forecast.component.scss'],
   standalone: true,
-  imports: [CommonModule]
+  imports: [CommonModule, TranslatePipe]
 })
 export class HourlyForecastComponent {
   @Input() forecast: any[] = [];

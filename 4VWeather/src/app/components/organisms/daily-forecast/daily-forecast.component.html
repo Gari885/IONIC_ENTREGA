@@ -2,7 +2,7 @@
   <div class="day-block" *ngFor="let day of forecast">
     <div class="day-header">
       <h3>{{ getSpanishDate(day.date) | titlecase }}</h3>
-      <span class="max-temp" *ngIf="day.items && day.items.length > 0">Max: {{ getMaxTemp(day.items) | number:'1.0-0' }}°</span>
+      <span class="max-temp" *ngIf="day.items && day.items.length > 0">{{ 'MAX' | translate }}: {{ getMaxTemp(day.items) | number:'1.0-0' }}°</span>
     </div>
     
     <div class="daily-carousel">
@@ -10,7 +10,21 @@
          <span class="time">{{ item.dt_txt | date:'HH:mm' }}</span>
          <img [src]="getIconUrl(item.weather[0].icon)" alt="icon">
          <span class="temp">{{ item.main.temp | number:'1.0-0' }}°</span>
-         <span class="precip" *ngIf="item.pop > 0">💧{{ (item.pop * 100) | number:'1.0-0' }}%</span>
+         
+         <div class="daily-details">
+           <div class="detail-row">
+             <span>💧</span>
+             <span>{{ (item.pop * 100) | number:'1.0-0' }}%</span>
+           </div>
+           <div class="detail-row">
+             <span>H</span>
+             <span>{{ item.main.humidity }}%</span>
+           </div>
+           <div class="detail-row">
+             <span>🌬️</span>
+             <span>{{ item.wind.speed | number:'1.0-0' }}</span>
+           </div>
+         </div>
       </div>
     </div>
   </div>
