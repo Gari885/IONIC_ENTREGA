@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonHeader, IonToolbar, IonTitle, IonContent, IonSpinner, IonButtons, IonButton, IonIcon } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonSpinner, IonButtons, IonButton, IonIcon, ToastController } from '@ionic/angular/standalone';
 import { SearchBarComponent } from '../components/molecules/search-bar/search-bar.component';
 import { WeatherCardComponent } from '../components/molecules/weather-card/weather-card.component';
 import { DailyForecastComponent } from '../components/organisms/daily-forecast/daily-forecast.component';
@@ -38,7 +38,8 @@ export class HomePage implements OnInit {
   constructor(
     public translationService: TranslationService,
     private weatherService: WeatherService,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private toastController: ToastController
   ) {
     addIcons({ locationOutline, cloudyNightOutline, globeOutline });
   }
@@ -57,6 +58,15 @@ export class HomePage implements OnInit {
       await this.getWeatherData(lat, lon);
     } catch (err: any) {
       console.error('Geolocation failed:', err && err.message ? err.message : err);
+      
+      const toast = await this.toastController.create({
+        message: `Ubicación falló: ${err && err.message ? err.message : 'Tiempo de espera agotado'}`,
+        duration: 3000,
+        position: 'bottom',
+        color: 'danger'
+      });
+      await toast.present();
+
       // Fallback to a default city instead of showing nothing
       this.onSearch('Pamplona');
     }

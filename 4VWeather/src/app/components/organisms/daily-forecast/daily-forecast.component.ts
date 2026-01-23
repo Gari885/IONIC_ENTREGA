@@ -18,7 +18,7 @@ export class DailyForecastComponent {
   Math = Math; // Make Math available in template
 
   getIconUrl(icon: string): string {
-    return `http://openweathermap.org/img/wn/${icon}@2x.png`;
+    return `https://openweathermap.org/img/wn/${icon}@2x.png`;
   }
 
   getMaxTemp(items: any[]): number {

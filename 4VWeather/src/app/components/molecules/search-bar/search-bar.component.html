@@ -1,6 +1,6 @@
 <ion-item lines="none" class="search-container">
   <ion-input
-    placeholder="Buscar ciudad..."
+    [placeholder]="'SEARCH_PLACEHOLDER' | translate"
     [(ngModel)]="searchTerm"
     (keyup.enter)="onSearch()"
   ></ion-input>

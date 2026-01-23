@@ -5,12 +5,14 @@ import { IonItem, IonInput, IonButton, IonIcon } from '@ionic/angular/standalone
 import { addIcons } from 'ionicons';
 import { searchOutline } from 'ionicons/icons';
 
+import { TranslatePipe } from '../../../pipes/translate.pipe';
+
 @Component({
   selector: 'app-search-bar',
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, IonItem, IonInput, IonButton, IonIcon]
+  imports: [CommonModule, FormsModule, IonItem, IonInput, IonButton, IonIcon, TranslatePipe]
 })
 export class SearchBarComponent {
   searchTerm: string = '';
